@@ -59,41 +59,9 @@ mysql> create user 'springuser'@'localhost' identified by 'ThePassword'; -- Crea
 mysql> grant all on db_example.* to 'springuser'@'localhost'; -- Gives all the privileges to the new user on the newly created database
 ----
 
-== Create the Spring Application
-
-Add `pom.xml` dependencies
-
-[source, xml, indent=0]
-----
-<!-- JPA Data (We are going to use Repositories, Entities, Hibernate, etc...) -->
-
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-
-<!-- Use MySQL Connector-J -->
-
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-</dependency>
-----
-
-or in Gradle `build.gradle`:
-
-[source, groovy]
-----
-// JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
-compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-
-// Use MySQL Connector-J
-compile group: 'mysql', name: 'mysql-connector-java'
-----
-
-Spring Boot gives you defaults on all things, the default in database is `H2`, so when you want to change this and use any other database you must define the connection attributes in the `application.properties` file
-
 == Create the `application.properties` file
+
+Spring Boot gives you defaults on all things, the default in database is `H2`, so when you want to change this and use any other database you must define the connection attributes in the `application.properties` file.
 
 In the sources folder, you create a resource file `src/main/resources/application.properties`
 
