@@ -1,28 +1,27 @@
 ---
-tags: [MySQL, Database, spring-data, jpa]
-projects: [spring-data-jpa, spring-boot]
+tags: [MySQL, database, spring-data]
+projects: [spring-data-jpa, spring-boot, spring-jdbc]
 ---
 :spring_version: current
 :spring_boot_version: 1.4.3.RELEASE
 :Controller: http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/stereotype/Controller.html
-:DispatcherServlet: http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/web/servlet/DispatcherServlet.html
 :SpringApplication: http://docs.spring.io/spring-boot/docs/{spring_boot_version}/api/org/springframework/boot/SpringApplication.html
-:ResponseBody: http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/web/bind/annotation/ResponseBody.html
 :toc:
 :icons: font
 :source-highlighter: prettify
-:project_id: gs-mysql-data
-This guide walks you through the process of creating a Spring application connected with a MySQL Database.
+:project_id: gs-accessing-data-mysql
+
+This guide walks you through the process of creating a Spring application connected with a MySQL Database, as opposed to an in-memory, embedded database, which all of the other guides and many sample apps use. It uses Spring Data JPA to access the database, but this is only one of many possible choices (e.g. you could use plain Spring JDBC).
 
 == What you'll build
 
 You'll create a MySQL database, build a Spring application and connect it with the newly created database.
 
-NOTE: MySQL is GPL'd, so ANY PROGRAM USING IT MUST BE GPL'd too. Refer to the link:http://www.gnu.org/licenses/gpl.html[General Public Licence]
+NOTE: MySQL is licensed with the GPL, so any program binary that you distribute using it must use the GPL too. Refer to the http://www.gnu.org/licenses/gpl.html[GNU General Public Licence].
 
 == What you'll need
 
-* MySQL version 5.6
+* https://dev.mysql.com/downloads/[MySQL] version 5.6 or better. If you have docker installed it might be useful to run the database as a https://hub.docker.com/_/mysql/[container].
 
 :java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
@@ -40,7 +39,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[initial]]
 == Create the database
 
-Go to the terminal (Command Prompt (cmd) in Microsoft Windows). Open MySQL Client with a user that can create new users.
+Go to the terminal (command Prompt `cmd` in Microsoft Windows). Open MySQL client with a user that can create new users.
 
 For example: On a Linux, use the command
 
@@ -49,7 +48,7 @@ For example: On a Linux, use the command
 $ sudo mysql --password
 ----
 
-NOTE: This connects to MySQL as a root, this is NOT THE RECOMMENDED WAY.
+NOTE: This connects to MySQL as a root, this is *not the recommended way* for a production server.
 
 Create a new database
 
@@ -78,7 +77,6 @@ Add `pom.xml` dependencies
 <dependency>
     <groupId>mysql</groupId>
     <artifactId>mysql-connector-java</artifactId>
-    <version>5.1.40</version>
 </dependency>
 ----
 
@@ -90,7 +88,7 @@ or in Gradle `build.gradle`:
 compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
 // Use MySQL Connector-J
-compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.40'
+compile group: 'mysql', name: 'mysql-connector-java'
 ----
 
 Spring Boot gives you defaults on all things, the default in database is `H2`, so when you want to change this and use any other database you must define the connection attributes in the `application.properties` file
@@ -127,7 +125,7 @@ This is coming in details in the end of this guide.
 include::complete/src/main/java/hello/User.java[]
 ----
 
-This is the entity class which Hibernate will automatically translate into a table
+This is the entity class which Hibernate will automatically translate into a table.
 
 == Create the repository
 
@@ -177,7 +175,7 @@ Now that the application is running, you can test it.
 Use `curl` for example.
 Now you have 2 REST Web Services you can test
 
-`localhost:8080/demo/getAll` This gets all data
+`localhost:8080/demo/all` This gets all data
 `localhost:8080/demo/add` This adds one user to the data
 
 [source,sh]
@@ -194,7 +192,7 @@ Saved
 
 [source,sh]
 ----
-$ curl 'localhost:8080/demo/getAll'
+$ curl 'localhost:8080/demo/all'
 ----
 
 The reply should be
@@ -206,21 +204,21 @@ The reply should be
 
 == Make some security changes
 
-Now when you are on production environment, you may be exposed to SQL injection attacks. A hacker may inject `DROP TABLE` or any other destructive SQL commands. So as a security practice, make those changes to your database first
+Now when you are on production environment, you may be exposed to SQL injection attacks. A hacker may inject `DROP TABLE` or any other destructive SQL commands. So as a security practice, make those changes to your database before you expose the application to users.
 
 [source,sh]
 ----
 mysql> revoke all on db_example.* from 'springuser'@'localhost';
 ----
 
-This revokes ALL the priviliges from the user associated with the Spring application. Now the Spring application CAN'T DO anything in the database. We don't want that, so
+This revokes ALL the priviliges from the user associated with the Spring application. Now the Spring application *cannot do* anything in the database. We don't want that, so
 
 [source,sh]
 ----
 mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'localhost';
 ----
 
-This gives your Spring application only the privileges necessary to make changes to ONLY the DATA of the database and not the STRUCTURE
+This gives your Spring application only the privileges necessary to make changes to *only* the data of the database and not the structure (schema).
 
 Now make this change to your `src/main/resources/application.properties`
 
@@ -229,14 +227,13 @@ Now make this change to your `src/main/resources/application.properties`
 spring.jpa.hibernate.ddl-auto=none
 ----
 
-This is instead of `create` which was on the first run for Hibernate to create the tables from your Entities.
+This is instead of `create` which was on the first run for Hibernate to create the tables from your entities.
 
-When you want to make changes on the database, regive the permissions, change the
-`spring.jpa.hibernate.ddl-auto` to `update`, then re-run your applications, then repeat.
+When you want to make changes on the database, regrant the permissions, change the `spring.jpa.hibernate.ddl-auto` to `update`, then re-run your applications, then repeat. Or, better, use a dedicated migration tool such as Flyway or Liquibase.
 
 == Summary
 
-Congratulations! You've just developed a Spring application which is bound to a MySQL database, Ready for production!!!
+Congratulations! You've just developed a Spring application which is bound to a MySQL database, Ready for production!
 
 
 
