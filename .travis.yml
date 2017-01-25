@@ -2,6 +2,8 @@ sudo: false
 language: java
 jdk:
 - oraclejdk8
+services:
+  - mysql
 script:
 - test/run.sh
 notifications:
