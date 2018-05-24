@@ -6,6 +6,6 @@ mysql:
     - MYSQL_USER=springuser
     - MYSQL_PASSWORD=ThePassword
     - MYSQL_DATABASE=db_example
-    - MYSQL_RANDOM_ROOT_PASSWORD=true
+    - MYSQL_ROOT_PASSWORD=root
   volumes:
     - "./conf.d:/etc/mysql/conf.d:ro"
