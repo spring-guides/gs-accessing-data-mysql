@@ -1,7 +1,7 @@
 :spring_version: current
 :spring_boot_version: 2.1.3.RELEASE
-:Controller: http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/stereotype/Controller.html
-:SpringApplication: http://docs.spring.io/spring-boot/docs/{spring_boot_version}/api/org/springframework/boot/SpringApplication.html
+:Controller: https://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/stereotype/Controller.html
+:SpringApplication: https://docs.spring.io/spring-boot/docs/{spring_boot_version}/api/org/springframework/boot/SpringApplication.html
 :toc:
 :icons: font
 :source-highlighter: prettify
@@ -13,7 +13,7 @@ This guide walks you through the process of creating a Spring application connec
 
 You'll create a MySQL database, build a Spring application and connect it with the newly created database.
 
-NOTE: MySQL is licensed with the GPL, so any program binary that you distribute using it must use the GPL too. Refer to the http://www.gnu.org/licenses/gpl.html[GNU General Public Licence].
+NOTE: MySQL is licensed with the GPL, so any program binary that you distribute using it must use the GPL too. Refer to the https://www.gnu.org/licenses/gpl.html[GNU General Public Licence].
 
 == What you'll need
 
