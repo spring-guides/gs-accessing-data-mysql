@@ -2,6 +2,8 @@ mysql:
   image: mysql
   ports:
     - "3306:3306"
+  expose:
+    - "3306"
   environment:
     - MYSQL_USER=springuser
     - MYSQL_PASSWORD=ThePassword
