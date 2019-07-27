@@ -73,7 +73,7 @@ Here, `spring.jpa.hibernate.ddl-auto` can be `none`, `update`, `create`, `create
 * `create` Creates the database every time, but don't drop it when close.
 * `create-drop` Creates the database then drops it when the `SessionFactory` closes.
 
-We here begin with `create` because we don't have the database structure yet. After the first run, we could switch it to `update` or `none` according to program requirements. Use `update` when you want to make some change to the database structure.
+We here begin with either `create` or `update` because we don't have the database structure yet. After the first run, we could switch it to `update` or `none` according to program requirements. Use `update` when you want to make some change to the database structure.
 
 The default for `H2` and other embedded databases is `create-drop`, but for others like `MySQL` is `none`
 
