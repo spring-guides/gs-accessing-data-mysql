@@ -110,7 +110,7 @@ The bean name will be `userRepository`
 include::complete/src/main/java/hello/MainController.java[]
 ----
 
-NOTE: The above example does not explicitly specify `POST` vs. `GET`, `PUT`, and so forth, because `@PostMapping` is a shortcut for `@RequestMapping(method=POST)`. `@RequestMapping` maps all HTTP operations by default. Use `@RequestMapping(method=POST)` or https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/package-summary.html[other shortcut annotations] to narrow this mapping.
+NOTE: The above example explicitly specifies `POST` and `GET` for the two endpoints. `@RequestMapping` maps all HTTP operations by default.
 
 
 == Make the application executable
@@ -137,14 +137,14 @@ Logging output is displayed. The service should be up and running within a few s
 Now that the application is running, you can test it.
 
 Use `curl` for example.
-Now you have 2 REST Web Services you can test
+Now you have 2 HTTP endpoints you can test
 
-`localhost:8080/demo/all` This gets all data
-`localhost:8080/demo/add` This adds one user to the data
+`GET localhost:8080/demo/all` This gets all data
+`POST localhost:8080/demo/add` This adds one user to the data
 
 [source,sh]
 ----
-$ curl 'localhost:8080/demo/add?name=First&email=someemail@someemailprovider.com'
+$ curl localhost:8080/demo/add -d name=First -d email=someemail@someemailprovider.com
 ----
 
 The reply should be
@@ -183,15 +183,6 @@ mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'loc
 ----
 
 This gives your Spring application only the privileges necessary to make changes to *only* the data of the database and not the structure (schema).
-
-Now make this change to your `src/main/resources/application.properties`
-
-[source,java]
-----
-spring.jpa.hibernate.ddl-auto=none
-----
-
-This is instead of `create` which was on the first run for Hibernate to create the tables from your entities.
 
 When you want to make changes on the database, regrant the permissions, change the `spring.jpa.hibernate.ddl-auto` to `update`, then re-run your applications, then repeat. Or, better, use a dedicated migration tool such as Flyway or Liquibase.
 

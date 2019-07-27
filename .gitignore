@@ -29,4 +29,5 @@ dependency-reduced-pom.xml
 *.iws
 *.idea
 
+.vscode/
 README.html
