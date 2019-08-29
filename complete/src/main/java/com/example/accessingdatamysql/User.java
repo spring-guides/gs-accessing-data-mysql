@@ -1,4 +1,4 @@
-package hello;
+package com.example.accessingdatamysql;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +38,6 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-    
-    
-}
 
+
+}
