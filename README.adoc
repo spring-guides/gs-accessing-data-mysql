@@ -139,7 +139,7 @@ You need to create the entity model, as the following listing
 (in `src/main/java/hello/User.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/accessingdatamysql/User.java[]
 ----
@@ -153,7 +153,7 @@ You need to create the repository that holds user records, as the following list
 (in `src/main/java/com/example/accessingdatamysql/UserRepository.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/accessingdatamysql/UserRepository.java[]
 ----
@@ -168,7 +168,7 @@ You need to create a controller to handle HTTP requests to your application, as 
 following listing (in `src/main/java/hello/MainController.java`) shows:
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/com/example/accessingdatamysql/MainController.java[]
 ----
@@ -184,7 +184,7 @@ the class that Initializr created for this example (in
 `src/main/java/com/example/accessingdatamysql/AccessingDataMysqlApplication.java`):
 
 ====
-[source,java]
+[source,java,tabsize=2]
 ----
 include::initial/src/main/java/com/example/accessingdatamysql/AccessingDataMysqlApplication.java[]
 ----
