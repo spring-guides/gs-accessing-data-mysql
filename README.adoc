@@ -136,7 +136,7 @@ can read more about this at the end of this guide.
 == Create the `@Entity` Model
 
 You need to create the entity model, as the following listing
-(in `src/main/java/hello/User.java`) shows:
+(in `src/main/java/com/example/accessingdatamysql/User.java`) shows:
 
 ====
 [source,java,tabsize=2]
@@ -165,7 +165,7 @@ Spring automatically implements this repository interface in a bean that has the
 == Create a Controller
 
 You need to create a controller to handle HTTP requests to your application, as the
-following listing (in `src/main/java/hello/MainController.java`) shows:
+following listing (in `src/main/java/com/example/accessingdatamysql/MainController.java`) shows:
 
 ====
 [source,java,tabsize=2]
