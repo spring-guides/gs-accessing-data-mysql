@@ -113,7 +113,7 @@ include::complete/src/main/resources/application.properties[]
 ====
 
 Here, `spring.jpa.hibernate.ddl-auto` can be `none`, `update`, `create`, or `create-drop`.
-See the Hibernate documentation for details.
+See the https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl[Hibernate documentation] for details.
 
 * `none`: The default for `MySQL`. No change is made to the database structure.
 * `update`: Hibernate changes the database according to the given entity structures.
