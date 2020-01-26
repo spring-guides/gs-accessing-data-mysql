@@ -122,13 +122,13 @@ See the https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate
 
 You must begin with either `create` or `update`, because you do not yet have the database
 structure. After the first run, you can switch it to `update` or `none`, according to
-program requirements. Use `update` when you want to make some changes to the database
+program requirements. Use `update` when you want to make some change to the database
 structure.
 
 The default for `H2` and other embedded databases is `create-drop`. For other databases,
 such as `MySQL`, the default is `none`.
 
-NOTE: It is a good security practice to, after your database is in production state, set
+NOTE: It is a good security practice to, after your database is in a production state, set
 this to `none`, revoke all privileges from the MySQL user connected to the Spring
 application, and give the MySQL user only `SELECT`, `UPDATE`, `INSERT`, and `DELETE`. You
 can read more about this at the end of this guide.
