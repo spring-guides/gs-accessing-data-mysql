@@ -258,7 +258,7 @@ application:
 ====
 [source,sh]
 ----
-mysql> revoke all on db_example.* from 'springuser'@'localhost';
+mysql> revoke all on db_example.* from 'springuser'@'%';
 ----
 ====
 
@@ -270,7 +270,7 @@ minimum privileges the application needs:
 ====
 [source,sh]
 ----
-mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'localhost';
+mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'%';
 ----
 ====
 
