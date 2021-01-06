@@ -38,8 +38,8 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 For all Spring applications, you should start with the https://start.spring.io[Spring
 Initializr]. The Initializr offers a fast way to pull in all the dependencies you need for
-an application and does a lot of the set up for you. This example needs the Spring Web
-Starter, Spring Data JPA, and MySQL Driver dependencies. 
+an application and does a lot of the set up for you. This example needs the Spring Web,
+Spring Data JPA, and MySQL Driver dependencies. 
 
 The following listing shows the `pom.xml` file created when you choose Maven:
 
