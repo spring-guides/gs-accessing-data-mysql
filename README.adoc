@@ -39,8 +39,9 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 For all Spring applications, you should start with the https://start.spring.io[Spring
 Initializr]. The Initializr offers a fast way to pull in all the dependencies you need for
 an application and does a lot of the set up for you. This example needs the Spring Web,
-Spring Data JPA, and MySQL Driver dependencies. 
+Spring Data JPA, and MySQL Driver dependencies.
 
+You can get a Maven build file with the necessary dependencies directly from the https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.4.2.RELEASE&packaging=jar&jvmVersion=11&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,mysql,data-jpa[Spring Initializr].
 The following listing shows the `pom.xml` file created when you choose Maven:
 
 ====
@@ -49,6 +50,8 @@ The following listing shows the `pom.xml` file created when you choose Maven:
 include::complete/pom.xml[]
 ----
 ====
+
+You can get a Gradle build file with the necessary dependencies directly from the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.2.RELEASE&packaging=jar&jvmVersion=11&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,mysql,data-jpa[Spring Initializr].
 
 The following listing shows the `build.gradle` file created when you choose Gradle:
 
