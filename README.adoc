@@ -47,7 +47,7 @@ include::complete/pom.xml[]
 ----
 ====
 
-If you use Maven, visit the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.2.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,mysql,data-jpa[Spring Initializr] to generate a new project with the required dependencies (Spring Web, Spring Data JPA, and MySQL Driver).
+If you use Gradle, visit the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.2.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,mysql,data-jpa[Spring Initializr] to generate a new project with the required dependencies (Spring Web, Spring Data JPA, and MySQL Driver).
 
 The following listing shows the `build.gradle` file created when you choose Gradle:
 
