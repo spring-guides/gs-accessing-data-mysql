@@ -198,7 +198,7 @@ The following curl command adds a user:
 ====
 [source,sh]
 ----
-$ curl localhost:8080/demo/add -d name=First -d email=someemail@someemailprovider.com
+$ curl http://localhost:8080/demo/add -d name=First -d email=someemail@someemailprovider.com
 ----
 ====
 
@@ -216,7 +216,7 @@ The following command shows all the users:
 ====
 [source,sh]
 ----
-$ curl 'localhost:8080/demo/all'
+$ curl http://localhost:8080/demo/all
 ----
 ====
 
