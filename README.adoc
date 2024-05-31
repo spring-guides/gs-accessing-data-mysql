@@ -6,6 +6,12 @@
 :icons: font
 :source-highlighter: prettify
 :project_id: gs-accessing-data-mysql
+:java_version: 17
+:build_system: gradle
+:build_name: accessing-data-mysql
+:build_version: 0.0.1-SNAPSHOT
+:network_container: guide-mysql
+:omit_native_build: y
 
 This guide walks you through the process of creating a Spring application connected to a
 MySQL Database (as opposed to an in-memory, embedded database, which most of the other
@@ -22,99 +28,30 @@ NOTE: MySQL is licensed with the GPL, so any program binary that you distribute 
 must use the GPL, too. See the
 https://www.gnu.org/licenses/gpl.html[GNU General Public Licence].
 
-== What You Need
+// required variables: {java_version}, {project_id}
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/guide_introduction.adoc[]
 
-* https://dev.mysql.com/downloads/[MySQL] version 5.6 or better. If you have Docker
-installed, it might be useful to run the database as a
-https://hub.docker.com/_/mysql/[container].
+== Setting up the MySQL Database
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/prereq_editor_jdk_buildtools.adoc[]
-
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/how_to_complete_this_guide.adoc[]
+Before you can build your application, you first need to configure a MySQL database.
+//required variables: none
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/docker_compose_support.adoc[]
 
 [[scratch]]
 == Starting with Spring Initializr
 
-You can use this https://start.spring.io/#!type=maven-project&language=java&packaging=jar&jvmVersion=17&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,data-jpa,mysql[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
+You can use this https://start.spring.io/#!type=maven-project&language=java&packaging=jar&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,data-jpa,mysql,docker-compose,testcontainers[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
 
 To manually initialize the project:
 
 . Navigate to https://start.spring.io.
 This service pulls in all the dependencies you need for an application and does most of the setup for you.
 . Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
-. Click *Dependencies* and select *Spring Web*, *Spring Data JPA*, and *MySQL Driver*.
+. Click *Dependencies* and select *Spring Web*, *Spring Data JPA*, *MySQL Driver*, *Docker Compose Support*, and *Testcontainers*.
 . Click *Generate*.
 . Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
 
 NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
-
-NOTE: You can also fork the project from Github and open it in your IDE or other editor.
-
-[[initial]]
-== Create the Database
-
-Open a terminal (command prompt in Microsoft Windows) and open a MySQL client as a user
-who can create new users.
-
-For example, on a Linux system, use the following command;
-
-====
-[source, sh]
-----
-$ sudo mysql --password
-----
-====
-
-NOTE: This connects to MySQL as `root` and allows access to the user from all hosts. This
-is *not the recommended way* for a production server.
-
-To create a new database, run the following commands at the `mysql` prompt:
-
-====
-[source, mysql]
-----
-mysql> create database db_example; -- Creates the new database
-mysql> create user 'springuser'@'%' identified by 'ThePassword'; -- Creates the user
-mysql> grant all on db_example.* to 'springuser'@'%'; -- Gives all privileges to the new user on the newly created database
-----
-====
-
-== Create the `application.properties` File
-
-Spring Boot gives you defaults on all things. For example, the default database is `H2`.
-Consequently, when you want to use any other database, you must define the connection
-attributes in the `application.properties` file.
-
-Create a resource file called `src/main/resources/application.properties`, as the
-following listing shows:
-
-====
-[source, java]
-----
-include::complete/src/main/resources/application.properties[]
-----
-====
-
-Here, `spring.jpa.hibernate.ddl-auto` can be `none`, `update`, `create`, or `create-drop`.
-See the https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl[Hibernate documentation] for details.
-
-* `none`: The default for `MySQL`. No change is made to the database structure.
-* `update`: Hibernate changes the database according to the given entity structures.
-* `create`: Creates the database every time but does not drop it on close.
-* `create-drop`: Creates the database and drops it when `SessionFactory` closes.
-
-You must begin with either `create` or `update`, because you do not yet have the database
-structure. After the first run, you can switch it to `update` or `none`, according to
-program requirements. Use `update` when you want to make some change to the database
-structure.
-
-The default for `H2` and other embedded databases is `create-drop`. For other databases,
-such as `MySQL`, the default is `none`.
-
-NOTE: It is a good security practice to, after your database is in a production state, set
-this to `none`, revoke all privileges from the MySQL user connected to the Spring
-application, and give the MySQL user only `SELECT`, `UPDATE`, `INSERT`, and `DELETE`. You
-can read more about this at the end of this guide.
 
 == Create the `@Entity` Model
 
@@ -175,14 +112,21 @@ include::initial/src/main/java/com/example/accessingdatamysql/AccessingDataMysql
 
 For this example, you need not modify the `AccessingDataMysqlApplication` class.
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/spring-boot-application-new-path.adoc[]
+Spring Initializr adds the `@SpringBootApplication` annotation to our main class. `@SpringBootApplication` is a convenience annotation that adds all of the following:
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_subhead.adoc[]
+- `@Configuration`: Tags the class as a source of bean definitions for the application
+context.
+- `@EnableAutoConfiguration`: Spring Boot attempts to automatically configure your Spring application based on the dependencies that you have added.
+- `@ComponentScan`: Tells Spring to look for other components, configurations, and
+services. If specific packages are not defined, recursive scanning begins with the package of the class that declares the annotation.
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_with_both.adoc[]
+== Run the Application
 
-When you run the application, logging output is displayed. The service should be up and running within a few seconds.
-
+At this point, you can now run the application to see your code in action.
+You can run the main method through your IDE or from the command line.
+Note that, if you have cloned the project from the solution repository, your IDE may look in the wrong place for the `compose.yaml` file.
+You can configure your IDE to look in the correct place or you could use the command line to run the application.
+The `./gradlew bootRun` and `./mvnw spring-boot:run` commands will launch the application and automatically find the compose.yaml file.
 
 == Test the Application
 
@@ -228,6 +172,69 @@ The reply should be as follows:
 ----
 ====
 
+
+
+== Preparing to Build the Application
+
+To package and run the application, we need to provide an external MySQL database rather than using Spring Boot Docker Compose Support.
+For this task, we can reuse the `compose.yaml` provided with a few modifications.
+First, modify the `ports` entry in `compose.yaml` to be `3306:3306`.
+Second, add a `container_name` of `guide-mysql`.
+After these steps, the `compose.yaml` file should be:
+
+[source,yaml]
+----
+services:
+  mysql:
+    container_name: 'guide-mysql'
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=mydatabase'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3306:3306'
+----
+You can now run `docker-compose up` to start this MySQL container.
+
+Third, we need to tell our application how to connect to the database.
+This step was previously handled automatically with Spring Boot Docker Compose support.
+To do so, modify the `application.properties` file so that it is now:
+
+[source,yaml]
+----
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
+spring.datasource.username=myuser
+spring.datasource.password=secret
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.show-sql: true
+----
+
+// required: {build_system}, {build_name}, {build_version}, {network_container}
+// optional: omit_native_build
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_and_execute_guide.adoc[]
+
+== Test the Application in Docker
+
+If you ran the application using a Docker instruction above, a simple curl command from a terminal or command line will no longer work.
+This is because we are running our containers in a https://docs.docker.com/compose/networking/[Docker network] that is not accessible from the terminal or command line. To run curl commands, we can start a third container to run our curl commands and attach it to the same network.
+
+First, obtain an interactive shell to a new container that is running on the same network as the MySQL database and the application:
+[source, bash]
+----
+docker run --rm --network container:guide-mysql -it alpine
+----
+
+Next, from the shell inside of the container, install curl:
+[source, bash]
+----
+apk add curl
+----
+
+Finally, you will be able to run the curl commands as described in <<_test_the_application>>.
+
 == Make Some Security Changes
 
 When you are on a production environment, you may be exposed to SQL injection attacks. A
@@ -241,7 +248,7 @@ application:
 ====
 [source,sh]
 ----
-mysql> revoke all on db_example.* from 'springuser'@'%';
+mysql> revoke all on db_example.* from 'myuser'@'%';
 ----
 ====
 
@@ -253,7 +260,7 @@ minimum privileges the application needs:
 ====
 [source,sh]
 ----
-mysql> grant select, insert, delete, update on db_example.* to 'springuser'@'%';
+mysql> grant select, insert, delete, update on db_example.* to 'myuser'@'%';
 ----
 ====
 
