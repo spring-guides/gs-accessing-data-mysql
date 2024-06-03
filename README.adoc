@@ -196,7 +196,7 @@ services:
     ports:
       - '3306:3306'
 ----
-You can now run `docker-compose up` to start this MySQL container.
+You can now run `docker compose up` to start this MySQL container.
 
 Third, we need to tell our application how to connect to the database.
 This step was previously handled automatically with Spring Boot Docker Compose support.
