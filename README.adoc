@@ -11,7 +11,6 @@
 :build_name: accessing-data-mysql
 :build_version: 0.0.1-SNAPSHOT
 :network_container: guide-mysql
-:omit_native_build: y
 
 This guide walks you through the process of creating a Spring application connected to a
 MySQL Database (as opposed to an in-memory, embedded database, which most of the other
@@ -126,7 +125,7 @@ At this point, you can now run the application to see your code in action.
 You can run the main method through your IDE or from the command line.
 Note that, if you have cloned the project from the solution repository, your IDE may look in the wrong place for the `compose.yaml` file.
 You can configure your IDE to look in the correct place or you could use the command line to run the application.
-The `./gradlew bootRun` and `./mvnw spring-boot:run` commands will launch the application and automatically find the compose.yaml file.
+The `./gradlew bootRun` and `./mvnw spring-boot:run` commands launch the application and automatically find the compose.yaml file.
 
 == Test the Application
 
@@ -177,9 +176,10 @@ The reply should be as follows:
 == Preparing to Build the Application
 
 To package and run the application, we need to provide an external MySQL database rather than using Spring Boot Docker Compose Support.
-For this task, we can reuse the `compose.yaml` provided with a few modifications.
+For this task, we can reuse the provided `compose.yaml` file with a few modifications:
 First, modify the `ports` entry in `compose.yaml` to be `3306:3306`.
 Second, add a `container_name` of `guide-mysql`.
+
 After these steps, the `compose.yaml` file should be:
 
 [source,yaml]
@@ -233,7 +233,7 @@ Next, from the shell inside of the container, install curl:
 apk add curl
 ----
 
-Finally, you will be able to run the curl commands as described in <<_test_the_application>>.
+Finally, you can run the curl commands as described in <<_test_the_application>>.
 
 == Make Some Security Changes
 
