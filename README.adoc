@@ -39,7 +39,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[scratch]]
 == Starting with Spring Initializr
 
-You can use this https://start.spring.io/#!type=maven-project&language=java&packaging=jar&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessing-data-mysql&dependencies=web,data-jpa,mysql,docker-compose,testcontainers[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
+You can use this https://start.spring.io/#!type=maven-project&language=java&packaging=jar&groupId=com.example&artifactId=accessing-data-mysql&name=accessing-data-mysql&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.accessingdatamysql&dependencies=web,data-jpa,mysql,docker-compose,testcontainers[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
 
 To manually initialize the project:
 
@@ -172,68 +172,42 @@ The reply should be as follows:
 ====
 
 
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_subhead.adoc[]
 
-== Preparing to Build the Application
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_with_both.adoc[]
 
-To package and run the application, we need to provide an external MySQL database rather than using Spring Boot Docker Compose Support.
-For this task, we can reuse the provided `compose.yaml` file with a few modifications:
-First, modify the `ports` entry in `compose.yaml` to be `3306:3306`.
-Second, add a `container_name` of `guide-mysql`.
+If you run the executable JAR using the `java -jar` command, docker compose support is no longer available.
+We need to make an update to our app so that it can connect to the MYSQL container defined in `compose.yaml`.
 
-After these steps, the `compose.yaml` file should be:
+First, we need to expose the `3306` port outside the container: edit `compose.yaml` and adapt the `ports` section to `3036:3036`.
+The end result should look as follows:
 
-[source,yaml]
+====
+[source,yaml,tabsize=2]
 ----
-services:
-  mysql:
-    container_name: 'guide-mysql'
-    image: 'mysql:latest'
-    environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
-    ports:
-      - '3306:3306'
+include::complete/compose.yaml[]
 ----
-You can now run `docker compose up` to start this MySQL container.
+====
 
-Third, we need to tell our application how to connect to the database.
-This step was previously handled automatically with Spring Boot Docker Compose support.
-To do so, modify the `application.properties` file so that it is now:
+Then, you need to configure the application to connect to the database.
+The URL, username, and password should match the credentials in the docker service configuration.
+We should also configure `spring.jpa.hibernate.ddl-auto` to create (or update) the database on startup if required.
 
-[source,yaml]
+====
+[source,properties,tabsize=2]
 ----
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=jdbc:mysql://localhost:3306/mydatabase
-spring.datasource.username=myuser
-spring.datasource.password=secret
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.jpa.show-sql: true
+include::complete/src/main/resources/application.properties[]
 ----
+====
 
-// required: {build_system}, {build_name}, {build_version}, {network_container}
-// optional: omit_native_build
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_and_execute_guide.adoc[]
+Before running the application, you also need to start the MySQL container as Spring Boot's docker compose no longer does that for you:
 
-== Test the Application in Docker
-
-If you ran the application using a Docker instruction above, a simple curl command from a terminal or command line will no longer work.
-This is because we are running our containers in a https://docs.docker.com/compose/networking/[Docker network] that is not accessible from the terminal or command line. To run curl commands, we can start a third container to run our curl commands and attach it to the same network.
-
-First, obtain an interactive shell to a new container that is running on the same network as the MySQL database and the application:
 [source, bash]
 ----
-docker run --rm --network container:guide-mysql -it alpine
+docker compose up -d
 ----
 
-Next, from the shell inside of the container, install curl:
-[source, bash]
-----
-apk add curl
-----
-
-Finally, you can run the curl commands as described in <<_test_the_application>>.
+You can then run the curl commands as described in <<_test_the_application>>.
 
 == Make Some Security Changes
 
