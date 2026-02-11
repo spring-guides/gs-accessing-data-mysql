@@ -1,5 +1,5 @@
 :spring_version: current
-:spring_boot_version: 3.2.0
+:spring_boot_version: 4.0.2
 :Controller: http://docs.spring.io/spring/docs/{spring_version}/javadoc-api/org/springframework/stereotype/Controller.html
 :SpringApplication: http://docs.spring.io/spring-boot/docs/{spring_boot_version}/api/org/springframework/boot/SpringApplication.html
 :toc:
@@ -25,7 +25,7 @@ created database.
 
 NOTE: MySQL is licensed with the GPL, so any program binary that you distribute with it
 must use the GPL, too. See the
-https://www.gnu.org/licenses/gpl.html[GNU General Public Licence].
+https://www.gnu.org/licenses/gpl.html[GNU General Public License].
 
 // required variables: {java_version}, {project_id}
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/guide_introduction.adoc[]
@@ -179,7 +179,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 If you run the executable JAR using the `java -jar` command, docker compose support is no longer available.
 We need to make an update to our app so that it can connect to the MYSQL container defined in `compose.yaml`.
 
-First, we need to expose the `3306` port outside the container: edit `compose.yaml` and adapt the `ports` section to `3036:3036`.
+First, we need to expose the `3306` port outside the container: edit `compose.yaml` and adapt the `ports` section to `3306:3306`.
 The end result should look as follows:
 
 ====
@@ -222,7 +222,7 @@ application:
 ====
 [source,sh]
 ----
-mysql> revoke all on db_example.* from 'myuser'@'%';
+mysql> revoke all on mydatabase.* from 'myuser'@'%';
 ----
 ====
 
@@ -234,7 +234,7 @@ minimum privileges the application needs:
 ====
 [source,sh]
 ----
-mysql> grant select, insert, delete, update on db_example.* to 'myuser'@'%';
+mysql> grant select, insert, delete, update on mydatabase.* to 'myuser'@'%';
 ----
 ====
 
